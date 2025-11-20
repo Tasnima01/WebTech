@@ -1,0 +1,132 @@
+<html>
+    <head>
+        <title>Global Tech Connect</title>
+        <style></style>
+        <script>
+            let count = 0;
+            let virtualCount = 0;    
+            let inPersonCount = 0;
+            let analyticsVisible = false;
+            function handleCountTotalReview() {
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const attendanceType = document.querySelector('input[name="attendanceType"]:checked');
+
+                let valid = false;
+
+                if (name == "" || !name) {
+                    document.getElementById("nameErr").innerHTML =
+                      "Name must be between 6 and 100 characters.";
+                } else {
+                    document.getElementById("nameErr").innerHTML = "";
+                    console.log("Name entered: " + name);
+                    valid = true;
+
+                    if (name.length < 6) {
+                      document.getElementById("nameErr").innerHTML =
+                        "name must be at least 6 characters long";
+                      valid = false;
+                    }
+                    if (name.length > 100) {
+                      document.getElementById("nameErr").innerHTML =
+                        "name cannot exceed 100 characters";
+                      valid = false;
+                    }
+                }
+
+                if (email == "" || !email) {
+                    document.getElementById("emailErr").innerHTML ="Email cannot be empty";
+                    valid = false;
+                } else {
+                    document.getElementById("emailErr").innerHTML = "";
+                    valid = true;
+
+                    const emailPattern =
+                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    if (!emailPattern.test(email)) {
+                      document.getElementById("emailErr").innerHTML =
+                        "Please enter a valid professional email address.";
+                      valid = false;
+                    }
+                }
+
+                if (company.length > 100) {
+                    document.getElementById("companyErr").innerHTML =
+                        "Company name cannot exceed 100 characters.";
+                    valid = false;
+                } else {
+                    document.getElementById("companyErr").innerHTML = "";
+                }
+
+                if (!attendanceType) {
+                    document.getElementById("attendanceTypeErr").innerHTML = "Attendance Type is required";
+                    valid=false;
+                } else {
+                    document.getElementById("attendanceTypeErr").innerHTML = "";
+                }
+                if (valid) {
+                    count++;
+                    if (attendanceType.value === "Virtual") {
+                        virtualCount++;
+                    } else if (attendanceType.value === "In Person") {
+                        inPersonCount++;
+                    }
+                document.getElementById("name").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("company").value = "";
+                document.querySelectorAll('input[name="attendanceType"]').forEach(el => el.checked = false);
+
+                alert("Registration Successful!");
+                }
+                return false;
+            }
+
+            function toggleAnalytics() {
+                const panel = document.getElementById("analyticsPanel");
+                const btn = document.getElementById("analyticsBtn");
+
+                if (!analyticsVisible) {
+                    panel.style.display = "block";
+                    panel.innerHTML = 
+                        "Total Registrants: " + count + "<br>" +
+                        "Virtual: " + virtualCount + "<br>" +
+                        "In-Person: " + inPersonCount;
+                    btn.innerHTML = "Hide Event Analytics";
+                    analyticsVisible = true;
+                } else {
+                    panel.style.display = "none";
+                    btn.innerHTML = "Show Event Analytics";
+                    analyticsVisible = false;
+                }
+            }
+
+        </script>
+    </head>
+
+    <body>
+        <h2>Event Registration Form</h2>
+        <form>
+            <label>FullName: <span style="color:red">*</span></label>
+            <input type="text" placeholder="Enter your full name" id="name" />
+            <p id="nameErr" style="color:red"></p>
+
+            <label>Email: <span style="color:red">*</span></label>
+            <input type="text" placeholder="Enter your email" id="email" />
+            <p id="emailErr" style="color:red"></p>
+
+            <label>Company: </label>
+            <input type="text" style="width:300px;height:70px;" placeholder="Enter your company" id="company" />
+            <p id="companyErr" style="color:red"></p>
+
+            <label>Attendance Type: <span style="color:red">*</span></label>
+            <input type="radio" id="virtual" name="attendanceType" value="Virtual" />Virtual
+            <input type="radio" id="inperson" name="attendanceType" value="In Person" />In Person
+            <p id="attendanceTypeErr" style="color:red"></p>
+
+            <button onclick="return handleCountTotalReview()">Submit</button>
+            <button type="button" id="analyticsBtn" onclick="toggleAnalytics()">Show Event Analytics</button>
+            <div id="analyticsPanel" style="display:none; margin-top:10px;"></div>
+
+        </form>
+    </body>
+</html>
